@@ -105,6 +105,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion(){
@@ -184,17 +185,31 @@
           console.log(optionId, option);
 
           // check if there is param with a name of paramId in formData and if it includes optionId
-          if(formData[paramId] && formData[paramId].includes(optionId)) {
+          const optionSelected = (formData[paramId] && formData[paramId].includes(optionId));
+          
+          if(optionSelected) {
             // check if the option is not default
-            if(!option.deafult) {
-              // add option price to price variable
+            if (!option.deafult) {
+              //add option price to price variable
               price += option.price;
             }
-          } else {
-            // check if the option is default
-            if(option.deafult == true) {
-              // reduce price variable
+          }
+          else {
+          //check if the option is default
+            if (option.deafult) {
+            //reduce price variable
               price = option.price;
+            }
+          }
+
+          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          
+          if(optionImage){
+            // Yes! We've found it!
+            if(optionSelected){
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            } else {
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);    
             }
           }
         }
