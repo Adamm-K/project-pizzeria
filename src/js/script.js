@@ -93,7 +93,6 @@
 
       thisProduct.id = id;
       thisProduct.data = data;
-      
 
       thisProduct.renderInMenu();
       //console.log('renderInMenu');
@@ -195,6 +194,7 @@
       thisProduct.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
 
@@ -251,9 +251,12 @@
           }
         }
       }
+
       /*multiply price by amount */
       price *= thisProduct.amountWidget.value;
 
+
+      thisProduct.priceSingle = price;
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
     }
@@ -266,6 +269,55 @@
       thisProduct.amountWidgetElem.addEventListener('updated', function(){
         thisProduct.processOrder();
       });
+    }
+
+    addToCart(){
+      const thisProduct = this;
+      app.cart.add(thisProduct.prepareCartProduct());
+    }
+
+    prepareCartProduct(){
+      const thisProduct = this;
+      const productSummary = {
+        id: thisProduct.id, 
+        name: thisProduct.data.name, 
+        amount: thisProduct.amountWidget.value, 
+        priceSingle: thisProduct.priceSingle, 
+        price: (thisProduct.priceSingle * thisProduct.amountWidget.value),
+        params: thisProduct.prepareCartProductParams()        
+      };
+      return(productSummary);
+    }
+
+    prepareCartProductParams() {
+      const thisProduct = this;
+    
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      const params = {};
+    
+      // for every category (param)
+      for(let paramId in thisProduct.data.params) {
+        const param = thisProduct.data.params[paramId];
+    
+        // create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}}
+        params[paramId] = {
+          label: param.label,
+          options: {}
+        };
+    
+        // for every option in this category
+        for(let optionId in param.options) {
+          const option = param.options[optionId];
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+    
+          if(optionSelected) {
+            // option is selected!
+            params[paramId].options[optionId] = option.label;
+          }
+        }
+      }
+    
+      return params;
     }
   }
 
@@ -346,7 +398,6 @@
       console.log('new Cart', thisCart);
     }
 
-    
     getElements(element){
       const thisCart = this;
 
@@ -354,7 +405,11 @@
       
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
-      
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
+      thisCart.dom.deliveryFee = thisCart.dom.wrapper.querySelector(select.cart.deliveryFee);
+      thisCart.dom.subtotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
+      thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelectorAll(select.cart.totalPrice);
+      thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);
     }
 
     initActions(){
@@ -364,14 +419,22 @@
         event.preventDefault();
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
-      //thisCart.dom.productList.addEventListener('updated', function(){
-      //thisCart.update();
-      //});
-      //thisCart.dom.productList.addEventListener('remove', function(event){
-      //thisCart.remove(event.detail.cartProduct);
-      //});
     }
 
+    add(menuProduct){
+      const thisCart = this;
+
+      /* generate html based on template */
+      const generatedHTML = templates.cartProduct(menuProduct);
+
+      /*  create const DOM using utils.createElementFromHTML */
+      const generatedDOM = utils.createDOMFromHTML(generatedHTML);
+
+      /* add element to cart */
+      thisCart.dom.productList.appendChild(generatedDOM);
+
+      console.log('adding product', menuProduct);
+    }
   }
 
   const app = {
@@ -382,7 +445,6 @@
       const cartElem = document.querySelector(select.containerOf.cart);
       thisApp.cart = new Cart(cartElem);
     },
-
 
     initMenu: function(){
       //console.log('initMenu:', app.initMenu);
@@ -417,7 +479,6 @@
       //console.log('initMenu()');
       thisApp.initCart();
       console.log('initCart()');
-
     },
   }; 
 
