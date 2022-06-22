@@ -225,16 +225,16 @@
 
           if(optionSelected) {
             // check if the option is not default
-            if (!option.deafult) {
+            if (!option.default) {
               //add option price to price variable
               price += option.price;
             }
           }
           else {
           //check if the option is default
-            if (option.deafult) {
+            if (option.default) {
             //reduce price variable
-              price = option.price;
+              price -= option.price;
             }
           }
 
