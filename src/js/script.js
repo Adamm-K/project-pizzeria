@@ -527,7 +527,7 @@
       const thisCartProduct = this;
 
       thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
-
+      thisCartProduct.amountWidget.setValue(thisCartProduct.amount);
       thisCartProduct.dom.amountWidget.addEventListener('updated', function(){
         
         thisCartProduct.amount = thisCartProduct.amountWidget.value;
