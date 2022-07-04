@@ -22,8 +22,8 @@
             {"allowTemplateLiterals": true}
         ],
         "semi": [
-            "error",
-            "always"
+          "error",
+          "always"
         ],
         "no-console": [
             "off"
