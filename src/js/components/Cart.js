@@ -11,8 +11,6 @@ class Cart{
     thisCart.getElements(element);
 
     thisCart.initActions();
-    
-    //console.log('new Cart', thisCart);
   }
 
   getElements(element){
@@ -88,6 +86,7 @@ class Cart{
 
   add(menuProduct){
     const thisCart = this;
+    //console.log('add', thisCart.add(menuProduct));
 
     /* generate html based on template */
     const generatedHTML = templates.cartProduct(menuProduct);
@@ -98,10 +97,7 @@ class Cart{
     /* add element to cart */
     thisCart.dom.productList.appendChild(generatedDOM);
 
-    //console.log('adding product', menuProduct);
-
     thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
-    //console.log('thisCart.products', thisCart.products);
 
     thisCart.update();
   }
@@ -127,11 +123,6 @@ class Cart{
       
     }
 
-    //console.log('deliveryFee', deliveryFee);
-    //console.log('totalNumber', totalNumber);
-    //console.log('subtotalPrice', subtotalPrice);
-    //console.log('totalPrice', thisCart.totalPrice);
-
     thisCart.dom.deliveryFee.innerHTML = thisCart.deliveryFee;
     thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
     thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
@@ -145,7 +136,6 @@ class Cart{
     const thisCart = this;
 
     const indexProduct = thisCart.products.indexOf(instanceProduct);
-    console.log(indexProduct);
 
     thisCart.products.splice(indexProduct, 1);
 

@@ -4,52 +4,46 @@ import AmountWidget from './AmountWidget.js';
 
 class Product{
   constructor(id, data){
-    //console.log('constructor');
     const thisProduct = this;
 
     thisProduct.id = id;
     thisProduct.data = data;
 
     thisProduct.renderInMenu();
-    //console.log('renderInMenu');
-    thisProduct.getElements();
-    //console.log('getElements');
-    thisProduct.initAccordion();
-    //console.log('initAccordion');
-    thisProduct.initOrderForm();
-    //console.log('initOrderForm');
-    thisProduct.initAmountWidget();
-    console.log('initAmountWidget');
-    thisProduct.processOrder();
-    //console.log('processOrder');
 
-    //console.log('new Product:', thisProduct);
+    thisProduct.getElements();
+    
+    thisProduct.initAccordion();
+    
+    thisProduct.initOrderForm();
+    
+    thisProduct.initAmountWidget();
+    
+    thisProduct.processOrder();
+    
+
+    
   }
   
   renderInMenu(){
     const thisProduct = this;
-    //console.log('thisProduct/this in renderInMenu():', thisProduct);
-
+    
     /* generate HTML based on template */
     const generatedHTML = templates.menuProduct(thisProduct.data);
-    //console.log('generatedHTML:', generatedHTML);
 
     /* create element using utils.createElementFromHTML */
     thisProduct.element = utils.createDOMFromHTML(generatedHTML);
-    //console.log('thisProduct.element:', thisProduct.element);
-
+    
     /* find menu container */
     const menuContainer = document.querySelector(select.containerOf.menu);
-    //console.log('menuContainer:', menuContainer);
-
+    
     /* add element to menu */
     menuContainer.appendChild(thisProduct.element);
-    //console.log('add element to menu');
+    
   }
 
   getElements(){
     const thisProduct = this;
-    //console.log('thisProduct in getElements():', thisProduct);
   
     thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
     thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
@@ -62,38 +56,31 @@ class Product{
 
   initAccordion(){
     const thisProduct = this;
-    //console.log('thisProduct in initAccordion():', thisProduct);
-
     /* find the clickable trigger (the element that should react to clicking) */
     //const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-    //console.log('clickableTrigger:', clickableTrigger);
 
     /* START: add event listener to clickable trigger on event click */
     //clickableTrigger.addEventListener('click', function(event){
     thisProduct.accordionTrigger.addEventListener('click', function(event) {
-      //console.log('Product was clicked!');
       /* prevent default action for event */
       event.preventDefault();
-      //console.log('event = ', event);
 
       /* find active product (product that has active class) */
       const activeProduct = document.querySelector(select.all.menuProductsActive);
-      //console.log('activeProduct:', activeProduct);
 
       /* if there is active product and it's not thisProduct.element, remove class active from it */
       if(activeProduct != null && activeProduct != thisProduct.element){
         activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
-        //console.log('if there is active product and its not thisProduct element, remove class active from it');
       }
+
       /* toggle active class on thisProduct.element */
       thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
-      //console.log('toggle active class on thisProduct.element');
+      
     });
   }
 
   initOrderForm(){
     const thisProduct = this;
-    //console.log('initOrderForm');
 
     thisProduct.form.addEventListener('submit', function(event){
       event.preventDefault();
@@ -115,11 +102,9 @@ class Product{
 
   processOrder(){
     const thisProduct = this;
-    //console.log('processOrder');
 
     // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
     const formData = utils.serializeFormToObject(thisProduct.form);
-    //console.log('formData', formData);
 
     // set price to default price
     let price = thisProduct.data.price;
@@ -128,13 +113,11 @@ class Product{
     for(let paramId in thisProduct.data.params) {
       // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
       const param = thisProduct.data.params[paramId];
-      //console.log(paramId, param);
 
       // for every option in this category
       for(let optionId in param.options) {
         // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
         const option = param.options[optionId];
-        //console.log(optionId, option);
 
         // check if there is param with a name of paramId in formData and if it includes optionId
         const optionSelected = (formData[paramId] && formData[paramId].includes(optionId));
