@@ -84,12 +84,19 @@ class Booking {
         ]);
       }) 
       .then(function([bookings, eventsCurrent, eventsRepeat ]){
-        console.log(bookings);
-        console.log(eventsCurrent);
-        console.log(eventsRepeat);
+        // console.log(bookings);
+        // console.log(eventsCurrent);
+        // console.log(eventsRepeat);
+        thisBooking.parseData(bookings, eventsCurrent, eventsRepeat);
       });
 
   }
+
+  //parseData(bookings, eventsCurrent, eventsRepeat){
+  //const thisBooking = this;
+
+  //thisBooking.booked = {};
+  //}
 }
 
 export default Booking;
