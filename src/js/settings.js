@@ -43,6 +43,10 @@ export const select = {
     peopleAmount: '.people-amount',
     hoursAmount: '.hours-amount',
     tables: '.floor-plan .table',
+    submit: '.order-confirmation [type="submit"]',
+    phone: `input[name="phone"]`,
+    address: `input[name="address"]`,
+    starters: `input[type="checkbox"]`,
   },
   nav: {
     links: '.main-nav a',
@@ -113,7 +117,10 @@ export const settings = {
     tableIdAttribute: 'data-table',
   },
   db: {
-    url: '//localhost:3131',
+    url:
+      '//' +
+      window.location.hostname +
+      (window.location.hostname == 'localhost' ? ':3131' : ''),
     products: 'products',
     order: 'order',
     booking: 'booking',
