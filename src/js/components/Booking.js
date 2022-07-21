@@ -116,18 +116,18 @@ class Booking {
 
     thisBooking.booked = {};
 
-    for(let item in bookings){
+    for(let item of bookings){
       thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
     }
     
-    for(let item in eventsCurrent){
+    for(let item of eventsCurrent){
       thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
     }
 
     const minDate = thisBooking.datePickerElem.minDate;
     const maxDate = thisBooking.datePickerElem.maxDate;
 
-    for(let item in eventsRepeat){
+    for(let item of eventsRepeat){
       if(item.repeat == 'daily'){
         for(let loopDate = minDate; loopDate <= maxDate; loopDate = utils.addDays(loopDate, 1)){
           thisBooking.makeBooked(utils.dateToStr(loopDate), item.hour, item.duration, item.table);
